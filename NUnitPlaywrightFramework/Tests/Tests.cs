@@ -1,6 +1,6 @@
+using Microsoft.Playwright;
 using NUnit.Framework.Internal;
 using NUnitPlaywrightFramework.Libs;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NUnitPlaywrightFramework.Tests
 {
@@ -10,6 +10,7 @@ namespace NUnitPlaywrightFramework.Tests
     {
         FrameworkActions frameworkActions;
         GetAttributes getAttributes;
+        
         [SetUp]
         public async Task ClassSetup()
         {
@@ -19,12 +20,26 @@ namespace NUnitPlaywrightFramework.Tests
             await _page.GotoAsync("https://www.saucedemo.com/");
         }
 
-
         [Test]
         public async Task HomepageHasSwagLabsInTitle()
         {
             string expectedTitle = "Swag Labs";
-            Assert.That(await getAttributes.GetTitle(), Is.EqualTo(expectedTitle));
+            Assert.That(await getAttributes.GetTitleAsync(), Is.EqualTo(expectedTitle));
+        }
+
+        [Test]
+        [TestCase("invalid_user1", "invalid_pass1", "Epic sadface: Username and password do not match any user in this service")]
+        [TestCase("", "invalid_pass2", "Epic sadface: Username and password do not match any user in this service")]
+        [TestCase("invalid_user3", "", "Epic sadface: Username and password do not match any user in this service")]
+        [TestCase("", "", "Epic sadface: Username and password do not match any user in this service")]
+        public async Task LoginWithInvalidCredentials(string username, string password, string errorMessage)
+        {
+            frameworkActions.PerformAction(Actions.Type, "#user-name", username);
+            frameworkActions.PerformAction(Actions.Type, "#password", password);
+            frameworkActions.PerformAction(Actions.Click, "#login-button", null);
+
+            string actualErrorMessage = await getAttributes.GetTextContentAsync("[data-test=\"error\"]");
+            Assert.That(errorMessage, Is.EqualTo(errorMessage));
         }
 
         [Test]
@@ -36,12 +51,11 @@ namespace NUnitPlaywrightFramework.Tests
 
             string expectedHeading = "Products";
 
-            frameworkActions.PerformAction(Constants.Type, "#user-name", username);
-            frameworkActions.PerformAction(Constants.Type, "#password", password);
-            frameworkActions.PerformAction(Constants.Click, "#login-button", null);
-            string actualHeading = await getAttributes.GetTextContent("[data-test=\"title\"]");
+            frameworkActions.PerformAction(Actions.Type, "#user-name", username);
+            frameworkActions.PerformAction(Actions.Type, "#password", password);
+            frameworkActions.PerformAction(Actions.Click, "#login-button", null);
+            string actualHeading = await getAttributes.GetTextContentAsync("[data-test=\"title\"]");
             Assert.That(actualHeading, Is.EqualTo(expectedHeading));
-
         }
     }
 }

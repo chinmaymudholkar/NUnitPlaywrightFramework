@@ -1,6 +1,6 @@
 namespace NUnitPlaywrightFramework.Libs
 {
-    public static class Constants
+    public static class Actions
     {
         public const string Click = "click";
         public const string Type = "type";

@@ -15,19 +15,19 @@ namespace NUnitPlaywrightFramework.Libs
         {
             switch (action)
             {
-                case Constants.Click:
+                case Actions.Click:
                     ClickAsync(selector).Wait();
                     break;
-                case Constants.Type:
+                case Actions.Type:
                     TypeAsync(selector, text).Wait();
                     break;
-                case Constants.WaitForSelector:
+                case Actions.WaitForSelector:
                     WaitForSelectorAsync(selector).Wait();
                     break;
-                case Constants.GetTextContent:
+                case Actions.GetTextContent:
                     GetTextContentAsync(selector).Wait();
                     break;
-                case Constants.GetAttribute:
+                case Actions.GetAttribute:
                     GetAttributeAsync(selector, text).Wait();
                     break;
             }
@@ -68,17 +68,17 @@ namespace NUnitPlaywrightFramework.Libs
             _page = page;
         }
 
-        public async Task<string> GetAttribute(string selector, string attribute)
+        public async Task<string> GetAttributeAsync(string selector, string attribute)
         {
             return await _page.GetAttributeAsync(selector, attribute);
         }
 
-        public async Task<string> GetTextContent(string selector)
+        public async Task<string> GetTextContentAsync(string selector)
         {
             return await _page.TextContentAsync(selector);
         }
 
-        public async Task<string> GetTitle()
+        public async Task<string> GetTitleAsync()
         {
             return await _page.TitleAsync();
         }
