@@ -1,8 +1,6 @@
-using NUnit.Framework;
 using Microsoft.Playwright;
-using System.Threading.Tasks;
 
-namespace NUnitPlaywrightFramework
+namespace NUnitPlaywrightFramework.Libs
 {
     public class BaseTest
     {

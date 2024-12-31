@@ -1,6 +1,4 @@
-using System.Threading.Tasks;
 using Microsoft.Playwright;
-using NUnitPlaywrightFramework.Libs;
 
 namespace NUnitPlaywrightFramework.Libs
 {
@@ -13,7 +11,7 @@ namespace NUnitPlaywrightFramework.Libs
             _page = page;
         }
 
-        public void PerformAction(string action, string selector, string text)
+        public void PerformAction(string action, string selector, string? text)
         {
             switch (action)
             {
@@ -58,6 +56,26 @@ namespace NUnitPlaywrightFramework.Libs
         private async Task<string> GetAttributeAsync(string selector, string attribute)
         {
             return await _page.GetAttributeAsync(selector, attribute);
+        }
+    }
+
+    public class GetAttributes
+    {
+        private readonly IPage _page;
+
+        public GetAttributes(IPage page)
+        {
+            _page = page;
+        }
+
+        public async Task<string> GetAttribute(string selector, string attribute)
+        {
+            return await _page.GetAttributeAsync(selector, attribute);
+        }
+
+        public async Task<string> GetTextContent(string selector)
+        {
+            return await _page.TextContentAsync(selector);
         }
 
         public async Task<string> GetTitle()
