@@ -1,4 +1,3 @@
-using Microsoft.Playwright;
 using NUnit.Framework.Internal;
 using NUnitPlaywrightFramework.Libs;
 
@@ -10,7 +9,7 @@ namespace NUnitPlaywrightFramework.Tests
     {
         FrameworkActions frameworkActions;
         GetAttributes getAttributes;
-        
+
         [SetUp]
         public async Task ClassSetup()
         {
@@ -29,31 +28,31 @@ namespace NUnitPlaywrightFramework.Tests
 
         [Test]
         [TestCase("invalid_user1", "invalid_pass1", "Epic sadface: Username and password do not match any user in this service")]
-        [TestCase("", "invalid_pass2", "Epic sadface: Username and password do not match any user in this service")]
-        [TestCase("invalid_user3", "", "Epic sadface: Username and password do not match any user in this service")]
-        [TestCase("", "", "Epic sadface: Username and password do not match any user in this service")]
+        [TestCase("", "invalid_pass2", "Epic sadface: Username is required")]
+        [TestCase("invalid_user3", "", "Epic sadface: Password is required")]
+        [TestCase("", "", "Epic sadface: Username is required")]
         public async Task LoginWithInvalidCredentials(string username, string password, string errorMessage)
         {
-            frameworkActions.PerformAction(Actions.Type, "#user-name", username);
-            frameworkActions.PerformAction(Actions.Type, "#password", password);
-            frameworkActions.PerformAction(Actions.Click, "#login-button", null);
+            frameworkActions.PerformAction(ActionTypes.Type, "#user-name", username);
+            frameworkActions.PerformAction(ActionTypes.Type, "#password", password);
+            frameworkActions.PerformAction(ActionTypes.Click, "#login-button", null);
 
             string actualErrorMessage = await getAttributes.GetTextContentAsync("[data-test=\"error\"]");
-            Assert.That(errorMessage, Is.EqualTo(errorMessage));
+            Assert.That(actualErrorMessage, Is.EqualTo(errorMessage));
         }
 
         [Test]
         public async Task LoginWithValidCredentials()
         {
             //Todo: Move to github secrets
-            string username = "standard_user";
-            string password = "secret_sauce";
+            string username = envVars["USERNAME"];
+            string password = envVars["PASSWORD"];
 
             string expectedHeading = "Products";
 
-            frameworkActions.PerformAction(Actions.Type, "#user-name", username);
-            frameworkActions.PerformAction(Actions.Type, "#password", password);
-            frameworkActions.PerformAction(Actions.Click, "#login-button", null);
+            frameworkActions.PerformAction(ActionTypes.Type, "#user-name", username);
+            frameworkActions.PerformAction(ActionTypes.Type, "#password", password);
+            frameworkActions.PerformAction(ActionTypes.Click, "#login-button", null);
             string actualHeading = await getAttributes.GetTextContentAsync("[data-test=\"title\"]");
             Assert.That(actualHeading, Is.EqualTo(expectedHeading));
         }

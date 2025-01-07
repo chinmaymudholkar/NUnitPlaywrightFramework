@@ -6,28 +6,25 @@ namespace NUnitPlaywrightFramework.Libs
     {
         private readonly IPage _page;
 
-        public FrameworkActions(IPage page)
-        {
-            _page = page;
-        }
+        public FrameworkActions(IPage page) => _page = page;
 
         public void PerformAction(string action, string selector, string? text)
         {
             switch (action)
             {
-                case Actions.Click:
+                case ActionTypes.Click:
                     ClickAsync(selector).Wait();
                     break;
-                case Actions.Type:
+                case ActionTypes.Type:
                     TypeAsync(selector, text).Wait();
                     break;
-                case Actions.WaitForSelector:
+                case ActionTypes.WaitForSelector:
                     WaitForSelectorAsync(selector).Wait();
                     break;
-                case Actions.GetTextContent:
+                case ActionTypes.GetTextContent:
                     GetTextContentAsync(selector).Wait();
                     break;
-                case Actions.GetAttribute:
+                case ActionTypes.GetAttribute:
                     GetAttributeAsync(selector, text).Wait();
                     break;
             }
@@ -63,10 +60,7 @@ namespace NUnitPlaywrightFramework.Libs
     {
         private readonly IPage _page;
 
-        public GetAttributes(IPage page)
-        {
-            _page = page;
-        }
+        public GetAttributes(IPage page) => _page = page;
 
         public async Task<string> GetAttributeAsync(string selector, string attribute)
         {

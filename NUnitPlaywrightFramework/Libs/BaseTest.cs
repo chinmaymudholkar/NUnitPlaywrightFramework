@@ -1,4 +1,5 @@
 using Microsoft.Playwright;
+using dotenv.net;
 
 namespace NUnitPlaywrightFramework.Libs
 {
@@ -8,10 +9,21 @@ namespace NUnitPlaywrightFramework.Libs
         protected IBrowser _browser { get; private set; }
         protected IBrowserContext _browserContext { get; private set; }
         protected IPage _page { get; private set; }
+        protected IDictionary<string, string> envVars { get; private set; }
 
         [SetUp]
         public async Task Setup()
         {
+            try
+            {
+                envVars = DotEnv.Read();
+                string username = envVars["USERNAME"];
+                string password = envVars["PASSWORD"];
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
             _playwright = await Playwright.CreateAsync();
             _browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = true });
             _browserContext = await _browser.NewContextAsync();
