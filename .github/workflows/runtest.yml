@@ -23,8 +23,8 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: |
-        dotnet build --no-restore
-        pwsh bin/Debug/net8.0/playwright.ps1 install --with-deps
+      run: dotnet build --no-restore
+    - name: Install playwright dependencies
+      run: pwsh bin/Debug/net8.0/playwright.ps1 install --with-deps
     - name: Test
       run: dotnet test --no-build --verbosity normal
