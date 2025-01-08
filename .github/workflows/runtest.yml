@@ -27,7 +27,8 @@ jobs:
     - name: Install playwright dependencies
       run: pwsh ./NUnitPlaywrightFramework/bin/Debug/net8.0/playwright.ps1 install --with-deps
     - name: Test
+      env:
+        $USERNAME: ${{secrets.USERNAME}}
+        $PASSWORD: ${{secrets.PASSWORD}}
       run: |
-        echo "$USERNAME=${{secrets.USERNAME}}"
-        echo "$PASSWORD=${{secrets.PASSWORD}}"
         dotnet test --no-build --verbosity normal
