@@ -38,12 +38,8 @@ namespace NUnitPlaywrightFramework.Libs
 
         public string GetEnvVariable(string variableName)
         {
-            string _val= Environment.GetEnvironmentVariable(variableName);
-            if (_val == null)
-            {
-                _val = "";
-            }
-            return _val;
+            string? _val = Environment.GetEnvironmentVariable(variableName);
+            return _val ?? string.Empty;
         }
     }
 }

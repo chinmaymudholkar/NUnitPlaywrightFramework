@@ -46,7 +46,7 @@ namespace NUnitPlaywrightFramework.Tests
         {
             frameworkActions.PerformAction(TxtUsername, ActionTypes.Type, username);
             frameworkActions.PerformAction(TxtPassword, ActionTypes.Type, password);
-            frameworkActions.PerformAction(BtnLogin, ActionTypes.Click, "");
+            frameworkActions.PerformAction(BtnLogin, ActionTypes.Click, string.Empty);
 
             string actualErrorMessage = await getAttributes.GetTextContentAsync(LblError);
             Assert.That(actualErrorMessage, Is.EqualTo(errorMessage));
@@ -59,7 +59,7 @@ namespace NUnitPlaywrightFramework.Tests
 
             frameworkActions.PerformAction(TxtUsername, ActionTypes.Type, GetEnvVariable("USERNAME"));
             frameworkActions.PerformAction(TxtPassword, ActionTypes.Type, GetEnvVariable("PASSWORD"));
-            frameworkActions.PerformAction(BtnLogin, ActionTypes.Click, "");
+            frameworkActions.PerformAction(BtnLogin, ActionTypes.Click, string.Empty);
             string actualHeading = await getAttributes.GetTextContentAsync(LblHeading);
             Assert.That(actualHeading, Is.EqualTo(expectedHeading));
         }
