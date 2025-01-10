@@ -10,12 +10,21 @@ namespace NUnitPlaywrightFramework.Tests
         FrameworkActions frameworkActions;
         GetAttributes getAttributes;
 
+        string TxtUsername;
+        string TxtPassword;
+        string BtnLogin;
+        string LblError;
+
         [SetUp]
         public async Task ClassSetup()
         {
             await Setup();
             frameworkActions = new FrameworkActions(_page);
             getAttributes = new GetAttributes(_page);
+            TxtUsername = "#user-name";
+            TxtPassword = "#password";
+            BtnLogin = "#login-button";
+            LblError = "[data-test=\"error\"]";
             await _page.GotoAsync("https://www.saucedemo.com/");
         }
 
@@ -33,9 +42,9 @@ namespace NUnitPlaywrightFramework.Tests
         [TestCase("", "", "Epic sadface: Username is required")]
         public async Task LoginWithInvalidCredentials(string username, string password, string errorMessage)
         {
-            frameworkActions.PerformAction(ActionTypes.Type, "#user-name", username);
-            frameworkActions.PerformAction(ActionTypes.Type, "#password", password);
-            frameworkActions.PerformAction(ActionTypes.Click, "#login-button", null);
+            frameworkActions.PerformAction(ActionTypes.Type, TxtUsername, username);
+            frameworkActions.PerformAction(ActionTypes.Type, TxtPassword, password);
+            frameworkActions.PerformAction(ActionTypes.Click, BtnLogin, null);
 
             string actualErrorMessage = await getAttributes.GetTextContentAsync("[data-test=\"error\"]");
             Assert.That(actualErrorMessage, Is.EqualTo(errorMessage));
@@ -46,10 +55,10 @@ namespace NUnitPlaywrightFramework.Tests
         {
             string expectedHeading = "Products";
 
-            frameworkActions.PerformAction(ActionTypes.Type, "#user-name", Environment.GetEnvironmentVariable("USERNAME"));
-            frameworkActions.PerformAction(ActionTypes.Type, "#password", Environment.GetEnvironmentVariable("PASSWORD"));
-            frameworkActions.PerformAction(ActionTypes.Click, "#login-button", null);
-            string actualHeading = await getAttributes.GetTextContentAsync("[data-test=\"title\"]");
+            frameworkActions.PerformAction(ActionTypes.Type, TxtUsername, Environment.GetEnvironmentVariable("USERNAME"));
+            frameworkActions.PerformAction(ActionTypes.Type, TxtPassword, Environment.GetEnvironmentVariable("PASSWORD"));
+            frameworkActions.PerformAction(ActionTypes.Click, BtnLogin, null);
+            string actualHeading = await getAttributes.GetTextContentAsync(LblError);
             Assert.That(actualHeading, Is.EqualTo(expectedHeading));
         }
     }
