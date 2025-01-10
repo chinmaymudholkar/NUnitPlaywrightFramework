@@ -16,8 +16,8 @@ namespace NUnitPlaywrightFramework.Tests
         string LblError;
         string LblHeading;
 
-        [SetUp]
-        public async Task ClassSetup()
+        [OneTimeSetUp]
+        public async Task OneTimeSetup()
         {
             await Setup();
             frameworkActions = new FrameworkActions(_page);
@@ -27,6 +27,11 @@ namespace NUnitPlaywrightFramework.Tests
             BtnLogin = "#login-button";
             LblError = "[data-test=\"error\"]";
             LblHeading = "[data-test=\"title\"]";
+        }
+
+        [SetUp]
+        public async Task ClassSetup()
+        {
             await _page.GotoAsync("https://www.saucedemo.com/");
         }
 

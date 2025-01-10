@@ -10,7 +10,7 @@ namespace NUnitPlaywrightFramework.Libs
         protected IBrowserContext _browserContext { get; private set; }
         protected IPage _page { get; private set; }
 
-        [SetUp]
+        [OneTimeSetUp]
         public async Task Setup()
         {
             try
@@ -27,7 +27,7 @@ namespace NUnitPlaywrightFramework.Libs
             _page = await _browserContext.NewPageAsync();
         }
 
-        [TearDown]
+        [OneTimeSetUp]
         public async Task Teardown()
         {
             await _page.CloseAsync();
