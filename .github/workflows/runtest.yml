@@ -32,8 +32,4 @@ jobs:
         echo "export PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
       shell: bash
     - name: Test
-      env:
-        $USERNAME: ${{secrets.USERNAME}}
-        $PASSWORD: ${{secrets.PASSWORD}}
-      run: |
-        dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal
