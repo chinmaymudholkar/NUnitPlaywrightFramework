@@ -22,7 +22,7 @@ namespace NUnitPlaywrightFramework.Libs
                 Console.WriteLine(e.Message);
             }
             _playwright = await Playwright.CreateAsync();
-            _browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = true });
+            _browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = false, SlowMo=500 });
             _browserContext = await _browser.NewContextAsync();
             _page = await _browserContext.NewPageAsync();
         }
