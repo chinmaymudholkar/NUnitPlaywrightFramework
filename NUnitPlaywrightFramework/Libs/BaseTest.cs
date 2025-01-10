@@ -35,5 +35,15 @@ namespace NUnitPlaywrightFramework.Libs
             await _browser.CloseAsync();
             _playwright.Dispose();
         }
+
+        public string GetEnvVariable(string variableName)
+        {
+            string _val= Environment.GetEnvironmentVariable(variableName);
+            if (_val == null)
+            {
+                _val = "";
+            }
+            return _val;
+        }
     }
 }
