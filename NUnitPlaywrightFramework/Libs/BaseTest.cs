@@ -13,16 +13,9 @@ namespace NUnitPlaywrightFramework.Libs
         [OneTimeSetUp]
         public async Task Setup()
         {
-            try
-            {
-                Env.Load();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            Env.Load();
             _playwright = await Playwright.CreateAsync();
-            _browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = true, SlowMo=500 });
+            _browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = bool.Parse(GetEnvVariable("HEADLESS")), SlowMo=500 });
             _browserContext = await _browser.NewContextAsync();
             _page = await _browserContext.NewPageAsync();
         }
