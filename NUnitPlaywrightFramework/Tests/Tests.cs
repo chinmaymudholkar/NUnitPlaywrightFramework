@@ -44,14 +44,10 @@ namespace NUnitPlaywrightFramework.Tests
         [Test]
         public async Task LoginWithValidCredentials()
         {
-            //Todo: Move to github secrets
-            string username = envVars["USERNAME"];
-            string password = envVars["PASSWORD"];
-
             string expectedHeading = "Products";
 
-            frameworkActions.PerformAction(ActionTypes.Type, "#user-name", username);
-            frameworkActions.PerformAction(ActionTypes.Type, "#password", password);
+            frameworkActions.PerformAction(ActionTypes.Type, "#user-name", Environment.GetEnvironmentVariable("USERNAME"));
+            frameworkActions.PerformAction(ActionTypes.Type, "#password", Environment.GetEnvironmentVariable("PASSWORD"));
             frameworkActions.PerformAction(ActionTypes.Click, "#login-button", null);
             string actualHeading = await getAttributes.GetTextContentAsync("[data-test=\"title\"]");
             Assert.That(actualHeading, Is.EqualTo(expectedHeading));
