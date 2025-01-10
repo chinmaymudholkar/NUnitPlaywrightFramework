@@ -37,6 +37,6 @@ jobs:
         echo "Your provided password is ${PASSWORD}"
       env:
         USERNAME: ${{ secrets.USERNAME }}
-        PASSWORD: ${{ secrets.PASSWORD
+        PASSWORD: ${{ secrets.PASSWORD }}
     - name: Test
       run: dotnet test --no-build --verbosity normal
