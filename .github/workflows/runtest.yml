@@ -12,7 +12,7 @@ on:
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
@@ -26,11 +26,14 @@ jobs:
       run: dotnet build --no-restore
     - name: Install playwright dependencies
       run: pwsh ./NUnitPlaywrightFramework/bin/Debug/net8.0/playwright.ps1 install --with-deps
+    - name: Use Secrets
+      run: |
+        echo "export USERNAME=${{ secrets.USERNAME }}" >> $GITHUB_ENV
+        echo "export PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
+      shell: bash
     - name: Test
       env:
         $USERNAME: ${{secrets.USERNAME}}
         $PASSWORD: ${{secrets.PASSWORD}}
       run: |
-        echo $USERNAME
-        echo $PASSWORD
         dotnet test --no-build --verbosity normal
