@@ -30,13 +30,11 @@ jobs:
       run: |
         echo "export USERNAME=${{ secrets.USERNAME }}" >> $GITHUB_ENV
         echo "export PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
+        echo "export HEADLESS=${{ vars.HEADLESS }}" >> $GITHUB_ENV
       shell: bash
-    - name: Verify Secrets
-      run: |
-        echo "Your provided username is ${USERNAME}"
-        echo "Your provided password is ${PASSWORD}"
+    - name: Test
       env:
         USERNAME: ${{ secrets.USERNAME }}
         PASSWORD: ${{ secrets.PASSWORD }}
-    - name: Test
+        HEADLESS: ${{ vars.HEADLESS }}
       run: dotnet test --no-build --verbosity normal
