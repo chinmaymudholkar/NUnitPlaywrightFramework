@@ -38,8 +38,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Screenshots\" />
-  </ItemGroup>
-
 </Project>
