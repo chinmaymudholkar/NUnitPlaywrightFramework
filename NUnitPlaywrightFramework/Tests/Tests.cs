@@ -8,20 +8,18 @@ namespace NUnitPlaywrightFramework.Tests
     public class Tests : BaseTest
     {
         FrameworkActions frameworkActions;
-        GetAttributes getAttributes;
 
-        string TxtUsername;
-        string TxtPassword;
-        string BtnLogin;
-        string LblError;
-        string LblHeading;
+        private string TxtUsername;
+        private string TxtPassword;
+        private string BtnLogin;
+        private string LblError;
+        private string LblHeading;
 
         [OneTimeSetUp]
         public async Task OneTimeSetup()
         {
             await Setup();
             frameworkActions = new FrameworkActions(_page);
-            getAttributes = new GetAttributes(_page);
             TxtUsername = "#user-name";
             TxtPassword = "#password";
             BtnLogin = "#login-button";
@@ -36,10 +34,10 @@ namespace NUnitPlaywrightFramework.Tests
         }
 
         [Test]
-        public async Task HomepageHasSwagLabsInTitle()
+        public void HomepageHasSwagLabsInTitle()
         {
             string expectedTitle = "Swag Labs";
-            Assert.That(await getAttributes.GetTitleAsync(), Is.EqualTo(expectedTitle));
+            frameworkActions.Verify(string.Empty, ActionTypes.GetTitle, expectedTitle);
         }
 
         [Test]
@@ -47,26 +45,23 @@ namespace NUnitPlaywrightFramework.Tests
         [TestCase("", "invalid_pass2", "Epic sadface: Username is required")]
         [TestCase("invalid_user3", "", "Epic sadface: Password is required")]
         [TestCase("", "", "Epic sadface: Username is required")]
-        public async Task LoginWithInvalidCredentials(string username, string password, string errorMessage)
+        public void LoginWithInvalidCredentials(string username, string password, string expectedErrorMessage)
         {
             frameworkActions.PerformAction(TxtUsername, ActionTypes.Type, username);
             frameworkActions.PerformAction(TxtPassword, ActionTypes.Type, password);
             frameworkActions.PerformAction(BtnLogin, ActionTypes.Click, string.Empty);
-
-            string actualErrorMessage = await getAttributes.GetTextContentAsync(LblError);
-            Assert.That(actualErrorMessage, Is.EqualTo(errorMessage));
+            frameworkActions.Verify(LblError, ActionTypes.GetTextContent, expectedErrorMessage);
         }
 
         [Test]
-        public async Task LoginWithValidCredentials()
+        public void LoginWithValidCredentials()
         {
             string expectedHeading = "Products";
 
             frameworkActions.PerformAction(TxtUsername, ActionTypes.Type, GetEnvVariable("USERNAME"));
             frameworkActions.PerformAction(TxtPassword, ActionTypes.Type, GetEnvVariable("PASSWORD"));
             frameworkActions.PerformAction(BtnLogin, ActionTypes.Click, string.Empty);
-            string actualHeading = await getAttributes.GetTextContentAsync(LblHeading);
-            Assert.That(actualHeading, Is.EqualTo(expectedHeading));
+            frameworkActions.Verify(LblHeading, ActionTypes.GetTextContent, expectedHeading);
         }
     }
 }

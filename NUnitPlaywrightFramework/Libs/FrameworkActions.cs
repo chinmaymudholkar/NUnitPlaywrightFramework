@@ -8,8 +8,9 @@ namespace NUnitPlaywrightFramework.Libs
 
         public FrameworkActions(IPage page) => _page = page;
 
-        public void PerformAction(string selector, string action, string value)
+        public void PerformAction(string selector, ActionTypes action, string value)
         {
+            TakeScreenshot($"{selector}-before-{action}.png").Wait();
             switch (action)
             {
                 case ActionTypes.Click:
@@ -26,6 +27,30 @@ namespace NUnitPlaywrightFramework.Libs
                     break;
                 case ActionTypes.GetAttribute:
                     GetAttributeAsync(selector, value).Wait();
+                    break;
+                case ActionTypes.GetTitle:
+                    GetTitleAsync().Wait();
+                    break;
+            }
+            TakeScreenshot($"{selector}-after-{action}.png").Wait();
+        }
+
+        public void Verify(string selector, ActionTypes property, string expectedValue)
+        {
+            string actualValue = string.Empty;
+            switch (property)
+            {
+                case ActionTypes.GetTextContent:
+                    actualValue = GetTextContentAsync(selector).Result;
+                    Assert.That(actualValue, Is.EqualTo(expectedValue));
+                    break;
+                case ActionTypes.GetAttribute:
+                    actualValue = GetAttributeAsync(selector, nameof(property)).Result;
+                    Assert.That(actualValue, Is.EqualTo(expectedValue));
+                    break;
+                case ActionTypes.GetTitle:
+                    actualValue = GetTitleAsync().Result;
+                    Assert.That(actualValue, Is.EqualTo(expectedValue));
                     break;
             }
         }
@@ -47,34 +72,27 @@ namespace NUnitPlaywrightFramework.Libs
 
         private async Task<string> GetTextContentAsync(string selector)
         {
-            return await _page.TextContentAsync(selector);
+            string? _val = await _page.TextContentAsync(selector);
+            return _val ?? string.Empty;
         }
 
         private async Task<string> GetAttributeAsync(string selector, string attribute)
         {
-            return await _page.GetAttributeAsync(selector, attribute);
-        }
-    }
-
-    public class GetAttributes
-    {
-        private readonly IPage _page;
-
-        public GetAttributes(IPage page) => _page = page;
-
-        public async Task<string> GetAttributeAsync(string selector, string attribute)
-        {
-            return await _page.GetAttributeAsync(selector, attribute);
+            string? _val = await _page.GetAttributeAsync(selector, attribute);
+            return _val ?? string.Empty;
         }
 
-        public async Task<string> GetTextContentAsync(string selector)
-        {
-            return await _page.TextContentAsync(selector);
-        }
-
-        public async Task<string> GetTitleAsync()
+        private async Task<string> GetTitleAsync()
         {
             return await _page.TitleAsync();
         }
+
+        private async Task TakeScreenshot(string file_name)
+        {
+            string screenshot_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Screenshots", file_name);
+            var options = new PageScreenshotOptions { Path = screenshot_path };
+            await _page.ScreenshotAsync(options);
+        }
     }
 }
+

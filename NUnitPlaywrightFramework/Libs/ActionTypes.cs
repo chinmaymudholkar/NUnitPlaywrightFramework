@@ -1,11 +1,12 @@
 namespace NUnitPlaywrightFramework.Libs
 {
-    public static class ActionTypes
+    public enum ActionTypes
     {
-        public const string Click = "click";
-        public const string Type = "type";
-        public const string WaitForSelector = "waitForSelector";
-        public const string GetTextContent = "getTextContent";
-        public const string GetAttribute = "getAttribute";
+        Click,
+        Type,
+        WaitForSelector,
+        GetTextContent,
+        GetAttribute,
+        GetTitle
     }
 }
