@@ -53,7 +53,8 @@ namespace NUnitPlaywrightFramework.Libs
                 case ObjectProperties.TITLE:
                     Assert.That(actualValue, Is.EqualTo(expectedValue));
                     break;
-                case ObjectProperties.URL | ObjectProperties.HREF:
+                case ObjectProperties.URL:
+                case ObjectProperties.HREF:
                     Assert.That(actualValue, Is.EqualTo(expectedValue));
                     break;
                 case ObjectProperties.CHECKED:
@@ -82,18 +83,15 @@ namespace NUnitPlaywrightFramework.Libs
                 case ObjectProperties.TITLE:
                     actualValue = GetTitleAsync().Result;
                     break;
-                case ObjectProperties.URL | ObjectProperties.HREF:
+                case ObjectProperties.URL:
+                case ObjectProperties.HREF:
                     actualValue = GetAttributeAsync(selector, "href").Result;
                     break;
                 case ObjectProperties.CHECKED:
-                    actualValue = GetAttributeAsync(selector, "checked").Result;
-                    break;
                 case ObjectProperties.UNCHECKED:
                     actualValue = GetAttributeAsync(selector, "checked").Result;
                     break;
                 case ObjectProperties.SELECTED:
-                    actualValue = GetAttributeAsync(selector, "selected").Result;
-                    break;
                 case ObjectProperties.UNSELECTED:
                     actualValue = GetAttributeAsync(selector, "selected").Result;
                     break;
