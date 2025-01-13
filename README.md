@@ -18,7 +18,7 @@ NUnitPlaywrightFramework is a test automation framework that leverages NUnit for
 ### Clone the Repository
 
 ```console
-git clone https://github.com/yourusername/NUnitPlaywrightFramework.git
+git clone https://github.com/chinmaymudholkar/NUnitPlaywrightFramework.git
 ```
 
 ### Install Playwright
@@ -29,7 +29,7 @@ pwsh .\NUnitPlaywrightFramework\bin\Debug\net8.0\playwright.ps1 --install-deps
 ```
 
 ### Build the Project
-Open the solution in Visual Studio and build the project to restore the NuGet packages and compile the code.
+Open the solution in Visual Studio, build the project to restore the NuGet packages, and compile the code.
 
 ## Running Tests
 You can run the tests using the Test Explorer in Visual Studio or by using the .NET CLI:
