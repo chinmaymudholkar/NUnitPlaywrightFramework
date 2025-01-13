@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NUnitPlaywrightFramework.Libs
+﻿namespace NUnitPlaywrightFramework.Libs
 {
     internal class Wrappers
     {
         //Create a method to get the current date and time
-        public string GetCurrentDateTime()
+        public string GetCurrentDateTime(string format= "yyyyMMddHHmmss")
         {
-            return DateTime.Now.ToString("yyyyMMddHHmmss");
+            return DateTime.Now.ToString(format);
         }
 
         public string CleanString(string input)
         {
-            char[] charsToRemove = new char[]
-                        {
-                ' ', ':', '/', '\\', '.', ',', ';', '(', ')', '[', ']', '{', '}', '!', '@', '#', '$', '%', '^', '&', '*', '+', '=', '?', '>', '<', '|', '~', '`', '\'', '\"', '‘', '’', '“', '”'
-                        };
+            char[] charsToRemove =
+                        [
+                ' ', ':', '/', '\\', '.', ',', ';', '(', ')', '[', ']', '{', '}', '!', '@', '#', '$', '%', '^', '&', '*', '+', '=', '?', '>', '<', '|', '~', '`', '\'', '\"'
+                        ];
 
             // Loop through the input string and remove all these characters
             foreach (char c in charsToRemove)

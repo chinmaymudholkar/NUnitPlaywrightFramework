@@ -19,7 +19,7 @@ namespace NUnitPlaywrightFramework.Tests
         public async Task OneTimeSetup()
         {
             await Setup();
-            frameworkActions = new FrameworkActions(_page);
+            frameworkActions = new(_page);
             TxtUsername = "#user-name";
             TxtPassword = "#password";
             BtnLogin = "#login-button";
@@ -37,7 +37,7 @@ namespace NUnitPlaywrightFramework.Tests
         public void HomepageHasSwagLabsInTitle()
         {
             string expectedTitle = "Swag Labs";
-            frameworkActions.Verify(string.Empty, ActionTypes.GetTitle, expectedTitle);
+            frameworkActions.Verify(string.Empty, ObjectProperties.TITLE, expectedTitle);
         }
 
         [Test]
@@ -47,10 +47,10 @@ namespace NUnitPlaywrightFramework.Tests
         [TestCase("", "", "Epic sadface: Username is required")]
         public void LoginWithInvalidCredentials(string username, string password, string expectedErrorMessage)
         {
-            frameworkActions.PerformAction(TxtUsername, ActionTypes.Type, username);
-            frameworkActions.PerformAction(TxtPassword, ActionTypes.Type, password);
-            frameworkActions.PerformAction(BtnLogin, ActionTypes.Click, string.Empty);
-            frameworkActions.Verify(LblError, ActionTypes.GetTextContent, expectedErrorMessage);
+            frameworkActions.PerformAction(TxtUsername, ObjectActions.Type, username);
+            frameworkActions.PerformAction(TxtPassword, ObjectActions.Type, password);
+            frameworkActions.PerformAction(BtnLogin, ObjectActions.Click, string.Empty);
+            frameworkActions.Verify(LblError, ObjectProperties.TEXT, expectedErrorMessage);
         }
 
         [Test]
@@ -58,10 +58,10 @@ namespace NUnitPlaywrightFramework.Tests
         {
             string expectedHeading = "Products";
 
-            frameworkActions.PerformAction(TxtUsername, ActionTypes.Type, GetEnvVariable("USERNAME"));
-            frameworkActions.PerformAction(TxtPassword, ActionTypes.Type, GetEnvVariable("PASSWORD"));
-            frameworkActions.PerformAction(BtnLogin, ActionTypes.Click, string.Empty);
-            frameworkActions.Verify(LblHeading, ActionTypes.GetTextContent, expectedHeading);
+            frameworkActions.PerformAction(TxtUsername, ObjectActions.Type, GetEnvVariable("USERNAME"));
+            frameworkActions.PerformAction(TxtPassword, ObjectActions.Type, GetEnvVariable("PASSWORD"));
+            frameworkActions.PerformAction(BtnLogin, ObjectActions.Click, string.Empty);
+            frameworkActions.Verify(LblHeading, ObjectProperties.TEXT, expectedHeading);
         }
     }
 }

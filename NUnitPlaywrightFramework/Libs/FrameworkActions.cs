@@ -12,53 +12,116 @@ namespace NUnitPlaywrightFramework.Libs
             wrappers = new();
         }
 
-
-        public void PerformAction(string selector, ActionTypes action, string value)
+        public void PerformAction(string selector, ObjectActions action, string value)
         {
             TakeScreenshot($"{selector}-before-{action}").Wait();
             switch (action)
             {
-                case ActionTypes.Click:
+                case ObjectActions.Click:
                     ClickAsync(selector).Wait();
                     break;
-                case ActionTypes.Type:
+                case ObjectActions.Type:
                     TypeAsync(selector, value).Wait();
                     break;
-                case ActionTypes.WaitForSelector:
+                case ObjectActions.CheckboxCheck:
+                    CheckAsync(selector).Wait();
+                    break;
+                case ObjectActions.CheckboxUncheck:
+                    UncheckAsync(selector).Wait();
+                    break;
+                case ObjectActions.RadioButtonSelect:
+                    RadioButtonSelectAsync(selector).Wait();
+                    break;
+                case ObjectActions.ListSelect:
+                    ListSelectAsync(selector, value).Wait();
+                    break;
+                default:
                     WaitForSelectorAsync(selector).Wait();
-                    break;
-                case ActionTypes.GetTextContent:
-                    GetTextContentAsync(selector).Wait();
-                    break;
-                case ActionTypes.GetAttribute:
-                    GetAttributeAsync(selector, value).Wait();
-                    break;
-                case ActionTypes.GetTitle:
-                    GetTitleAsync().Wait();
                     break;
             }
             TakeScreenshot($"{selector}-after-{action}").Wait();
         }
 
-        public void Verify(string selector, ActionTypes property, string expectedValue)
+        public void Verify(string selector, ObjectProperties property, string expectedValue)
+        {
+            string actualValue = GetObjectProperty(selector, property);
+            switch (property)
+            {
+                case ObjectProperties.TEXT:
+                    Assert.That(actualValue, Is.EqualTo(expectedValue));
+                    break;
+                case ObjectProperties.TITLE:
+                    Assert.That(actualValue, Is.EqualTo(expectedValue));
+                    break;
+                case ObjectProperties.URL | ObjectProperties.HREF:
+                    Assert.That(actualValue, Is.EqualTo(expectedValue));
+                    break;
+                case ObjectProperties.CHECKED:
+                    Assert.That(actualValue.ToLower(), Is.EqualTo("true"));
+                    break;
+                case ObjectProperties.UNCHECKED:
+                    Assert.That(actualValue.ToLower(), Is.EqualTo("false"));
+                    break;
+                case ObjectProperties.SELECTED:
+                    Assert.That(actualValue.ToLower(), Is.EqualTo("true"));
+                    break;
+                case ObjectProperties.UNSELECTED:
+                    Assert.That(actualValue.ToLower(), Is.EqualTo("false"));
+                    break;
+            }
+        }
+
+        public string GetObjectProperty(string selector, ObjectProperties property)
         {
             string actualValue = string.Empty;
             switch (property)
             {
-                case ActionTypes.GetTextContent:
+                case ObjectProperties.TEXT:
                     actualValue = GetTextContentAsync(selector).Result;
-                    Assert.That(actualValue, Is.EqualTo(expectedValue));
                     break;
-                case ActionTypes.GetAttribute:
-                    actualValue = GetAttributeAsync(selector, nameof(property)).Result;
-                    Assert.That(actualValue, Is.EqualTo(expectedValue));
-                    break;
-                case ActionTypes.GetTitle:
+                case ObjectProperties.TITLE:
                     actualValue = GetTitleAsync().Result;
-                    Assert.That(actualValue, Is.EqualTo(expectedValue));
+                    break;
+                case ObjectProperties.URL | ObjectProperties.HREF:
+                    actualValue = GetAttributeAsync(selector, "href").Result;
+                    break;
+                case ObjectProperties.CHECKED:
+                    actualValue = GetAttributeAsync(selector, "checked").Result;
+                    break;
+                case ObjectProperties.UNCHECKED:
+                    actualValue = GetAttributeAsync(selector, "checked").Result;
+                    break;
+                case ObjectProperties.SELECTED:
+                    actualValue = GetAttributeAsync(selector, "selected").Result;
+                    break;
+                case ObjectProperties.UNSELECTED:
+                    actualValue = GetAttributeAsync(selector, "selected").Result;
                     break;
             }
+            return actualValue;
         }
+
+
+        private async Task ListSelectAsync(string selector, string value)
+        {
+            await _page.SelectOptionAsync(selector, value);
+        }
+
+        private async Task RadioButtonSelectAsync(string selector)
+        {
+            await _page.ClickAsync(selector);
+        }
+
+        private async Task CheckAsync(string selector)
+        {
+            await _page.SetCheckedAsync(selector, true);
+        }
+
+        private async Task UncheckAsync(string selector)
+        {
+            await _page.SetCheckedAsync(selector, false);
+        }
+
 
         private async Task ClickAsync(string selector)
         {
@@ -94,15 +157,10 @@ namespace NUnitPlaywrightFramework.Libs
 
         private async Task TakeScreenshot(string file_name)
         {
-            string? base_path = string.Empty;
-            base_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName;
-            if (base_path == null)
-            {
-                base_path = AppDomain.CurrentDomain.BaseDirectory;
-            }
+            string? base_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName;
+            base_path = (base_path == null) ? AppDomain.CurrentDomain.BaseDirectory : base_path;
             string screenshot_path = Path.Combine(base_path, "Screenshots", $"{wrappers.GetCurrentDateTime()}-{wrappers.CleanString(file_name)}.png");
-            var options = new PageScreenshotOptions { Path = screenshot_path };
-            await _page.ScreenshotAsync(options);
+            _ = await _page.ScreenshotAsync(new PageScreenshotOptions { Path = screenshot_path });
         }
     }
 }
