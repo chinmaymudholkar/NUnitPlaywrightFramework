@@ -7,7 +7,7 @@ namespace NUnitPlaywrightFramework.Tests
 {
     [Parallelizable(ParallelScope.Self)]
     [TestFixture]
-    public class SampleUITests : BaseTest
+    public class SampleUITests : UIBase
     {
         private LoginPage loginPage;
         private ProductsPage productsPage;

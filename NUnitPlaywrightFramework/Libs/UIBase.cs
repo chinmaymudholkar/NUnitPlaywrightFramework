@@ -3,7 +3,7 @@ using DotNetEnv;
 
 namespace NUnitPlaywrightFramework.Libs
 {
-    public class BaseTest
+    public class UIBase
     {
         protected IPlaywright _playwright { get; private set; }
         protected IBrowser _browser { get; private set; }
@@ -20,7 +20,7 @@ namespace NUnitPlaywrightFramework.Libs
             _page = await _browserContext.NewPageAsync();
         }
 
-        [OneTimeSetUp]
+        [OneTimeTearDown]
         public async Task Teardown()
         {
             await _page.CloseAsync();
