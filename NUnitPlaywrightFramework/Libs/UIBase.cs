@@ -1,9 +1,8 @@
 using Microsoft.Playwright;
-using DotNetEnv;
 
 namespace NUnitPlaywrightFramework.Libs
 {
-    public class UIBase
+    public class UIBase : TestBase
     {
         protected IPlaywright _playwright { get; private set; }
         protected IBrowser _browser { get; private set; }
@@ -11,11 +10,12 @@ namespace NUnitPlaywrightFramework.Libs
         protected IPage _page { get; private set; }
 
         [OneTimeSetUp]
-        public async Task Setup()
+        public async Task UISetup()
         {
-            Env.Load();
+            BaseSetup();
+            bool _headless_mode = bool.Parse(GetEnvVariable(EnvironmentVariables.HEADLESS_MODE));
             _playwright = await Playwright.CreateAsync();
-            _browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = bool.Parse(GetEnvVariable("HEADLESS")), SlowMo=500 });
+            _browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = _headless_mode, SlowMo=500 });
             _browserContext = await _browser.NewContextAsync();
             _page = await _browserContext.NewPageAsync();
         }
@@ -27,12 +27,6 @@ namespace NUnitPlaywrightFramework.Libs
             await _browserContext.CloseAsync();
             await _browser.CloseAsync();
             _playwright.Dispose();
-        }
-
-        public string GetEnvVariable(string variableName)
-        {
-            string? _val = Environment.GetEnvironmentVariable(variableName);
-            return _val ?? string.Empty;
         }
     }
 }

@@ -6,12 +6,12 @@ namespace NUnitPlaywrightFramework.Pages
     public class LoginPage
     {
         private readonly IPage page;
-        private readonly FrameworkActions frameworkActions;
+        private readonly UiActions frameworkActions;
 
         public LoginPage(IPage page)
         {
             this.page = page;
-            frameworkActions = new FrameworkActions(page);
+            frameworkActions = new UiActions(page);
         }
 
         private string TxtUsername => "#user-name";
@@ -21,7 +21,7 @@ namespace NUnitPlaywrightFramework.Pages
 
         public async Task GotoAsync()
         {
-            await page.GotoAsync("https://www.saucedemo.com/");
+            await page.GotoAsync(new TestBase().GetEnvVariable(EnvironmentVariables.UI_BASE_URL));
         }
 
         public void Login(string username, string password)

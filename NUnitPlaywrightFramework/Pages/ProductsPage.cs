@@ -6,19 +6,19 @@ namespace NUnitPlaywrightFramework.Pages
     public class ProductsPage
     {
         private readonly IPage page;
-        private readonly FrameworkActions frameworkActions;
+        private readonly UiActions frameworkActions;
 
         public ProductsPage(IPage page)
         {
             this.page = page;
-            frameworkActions = new FrameworkActions(page);
+            frameworkActions = new UiActions(page);
         }
 
-        private string LblHeading => "[data-test=\"title\"]";
+        private string LblHeader => "[data-test=\"title\"]";
 
         public void VerifyHeading(string expectedHeading)
         {
-            frameworkActions.Verify(LblHeading, ObjectProperties.TEXT, expectedHeading);
+            frameworkActions.Verify(LblHeader, ObjectProperties.TEXT, expectedHeading);
         }
     }
 }

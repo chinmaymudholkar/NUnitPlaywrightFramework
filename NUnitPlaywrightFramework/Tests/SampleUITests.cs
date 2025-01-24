@@ -1,7 +1,6 @@
-using NUnit.Framework;
 using NUnit.Framework.Internal;
-using NUnitPlaywrightFramework.Libs;
 using NUnitPlaywrightFramework.Pages;
+using NUnitPlaywrightFramework.Libs;
 
 namespace NUnitPlaywrightFramework.Tests
 {
@@ -15,7 +14,7 @@ namespace NUnitPlaywrightFramework.Tests
         [OneTimeSetUp]
         public async Task OneTimeSetup()
         {
-            await Setup();
+            await UISetup();
             loginPage = new LoginPage(_page);
             productsPage = new ProductsPage(_page);
         }
@@ -49,7 +48,10 @@ namespace NUnitPlaywrightFramework.Tests
         {
             string expectedHeading = "Products";
 
-            loginPage.Login(GetEnvVariable("USERNAME"), GetEnvVariable("PASSWORD"));
+            string username = GetEnvVariable(EnvironmentVariables.STANDARD_USERNAME);
+            string password = GetEnvVariable(EnvironmentVariables.STANDARD_PASSWORD);
+
+            loginPage.Login(username, password);
             productsPage.VerifyHeading(expectedHeading);
         }
     }

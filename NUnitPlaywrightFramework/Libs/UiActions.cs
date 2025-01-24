@@ -1,15 +1,17 @@
 using Microsoft.Playwright;
 namespace NUnitPlaywrightFramework.Libs
 {
-    public class FrameworkActions
+    public class UiActions
     {
         private readonly IPage _page;
         private readonly Wrappers wrappers;
+        private int screenshotCounter;
 
-        public FrameworkActions(IPage page)
+        public UiActions(IPage page)
         {
             _page = page;
             wrappers = new();
+            screenshotCounter = 1;
         }
 
         public void PerformAction(string selector, ObjectActions action, string value)
@@ -99,7 +101,6 @@ namespace NUnitPlaywrightFramework.Libs
             return actualValue;
         }
 
-
         private async Task ListSelectAsync(string selector, string value)
         {
             await _page.SelectOptionAsync(selector, value);
@@ -119,7 +120,6 @@ namespace NUnitPlaywrightFramework.Libs
         {
             await _page.SetCheckedAsync(selector, false);
         }
-
 
         private async Task ClickAsync(string selector)
         {
@@ -155,10 +155,15 @@ namespace NUnitPlaywrightFramework.Libs
 
         private async Task TakeScreenshot(string file_name)
         {
-            string? base_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName;
-            base_path = (base_path == null) ? AppDomain.CurrentDomain.BaseDirectory : base_path;
-            string screenshot_path = Path.Combine(base_path, "Screenshots", $"{wrappers.GetCurrentDateTime()}-{wrappers.CleanString(file_name)}.png");
-            _ = await _page.ScreenshotAsync(new PageScreenshotOptions { Path = screenshot_path });
+            
+            if (bool.Parse(new UIBase().GetEnvVariable(EnvironmentVariables.CAPTURE_SCREENSHOTS)))
+            {
+                string? base_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName;
+                base_path = (base_path == null) ? AppDomain.CurrentDomain.BaseDirectory : base_path;
+                string screenshot_path = Path.Combine(base_path, "Screenshots", $"{screenshotCounter.ToString("D4")}-{wrappers.GetCurrentDateTime()}-{wrappers.CleanString(file_name)}.png");
+                _ = await _page.ScreenshotAsync(new PageScreenshotOptions { Path = screenshot_path });
+                screenshotCounter++;
+            }
         }
     }
 }
