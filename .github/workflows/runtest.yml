@@ -8,8 +8,6 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-  schedule:
-    - cron: "0 7 * * *"
 
 jobs:
   build:
@@ -30,13 +28,15 @@ jobs:
       run: pwsh ./NUnitPlaywrightFramework/bin/Debug/net8.0/playwright.ps1 install --with-deps
     - name: Use Secrets
       run: |
-        echo "export USERNAME=${{ secrets.USERNAME }}" >> $GITHUB_ENV
-        echo "export PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
+        echo "export STANDARD_USERNAME=${{ secrets.STANDARD_USERNAME }}" >> $GITHUB_ENV
+        echo "export STANDARD_PASSWORD=${{ secrets.STANDARD_PASSWORD }}" >> $GITHUB_ENV
         echo "export HEADLESS=${{ vars.HEADLESS }}" >> $GITHUB_ENV
+        echo "export CAPTURE_SCREENSHOTS=${{ vars.CAPTURE_SCREENSHOTS }}" >> $GITHUB_ENV
       shell: bash
     - name: Test
       env:
-        USERNAME: ${{ secrets.USERNAME }}
-        PASSWORD: ${{ secrets.PASSWORD }}
+        USERNAME: ${{ secrets.STANDARD_USERNAME }}
+        PASSWORD: ${{ secrets.STANDARD_PASSWORD }}
         HEADLESS: ${{ vars.HEADLESS }}
+        CAPTURE_SCREENSHOTS: $ {{ vars.CAPTURE_SCREENSHOTS }}
       run: dotnet test --no-build --verbosity normal
