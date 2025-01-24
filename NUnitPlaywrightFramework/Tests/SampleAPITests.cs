@@ -7,12 +7,12 @@ namespace NUnitPlaywrightFramework.Tests
     [TestFixture]
     internal class SampleAPITests : ApiBase
     {
-        protected ApiActions frameworkActions;
+        protected ApiActions apiActions;
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
             ApiBaseSetup();
-            frameworkActions = new();
+            apiActions = new();
         }
 
         [Test]
@@ -23,7 +23,7 @@ namespace NUnitPlaywrightFramework.Tests
             string endpoint = "/api/users/2";
 
             //Act
-            var responseCode = frameworkActions.GetAsync(endpoint).Result.ResponseStatusCode;
+            var responseCode = apiActions.GetAsync(endpoint).Result.ResponseStatusCode;
 
             //Assert
             Assert.That(responseCode, Is.EqualTo(expectedResponseCode));
@@ -37,7 +37,7 @@ namespace NUnitPlaywrightFramework.Tests
             string endpoint = "/api/users";
 
             //Act
-            var response = frameworkActions.GetAsync(endpoint).Result.ResponseBody?["data"]?[3]?["email"]?.ToString();
+            var response = apiActions.GetAsync(endpoint).Result.ResponseBody?["data"]?[3]?["email"]?.ToString();
 
             //Assert
             Assert.That(response, Is.EqualTo(expectedResult));

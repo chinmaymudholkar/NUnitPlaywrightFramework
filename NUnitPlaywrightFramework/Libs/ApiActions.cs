@@ -5,13 +5,11 @@ namespace NUnitPlaywrightFramework.Libs
 {
     internal class ApiActions
     {
-        private readonly Wrappers wrappers;
         private HttpClient httpClient { get; set; }
         private Uri apiBaseUrl { get; set; }
 
         internal ApiActions()
         {
-            wrappers = new();
             httpClient = new();
             apiBaseUrl = new Uri(new TestBase().GetEnvVariable(EnvironmentVariables.API_BASE_URL));
         }

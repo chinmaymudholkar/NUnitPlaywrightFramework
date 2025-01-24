@@ -6,12 +6,12 @@ namespace NUnitPlaywrightFramework.Pages
     public class LoginPage
     {
         private readonly IPage page;
-        private readonly UiActions frameworkActions;
+        private readonly UiActions uiActions;
 
         public LoginPage(IPage page)
         {
             this.page = page;
-            frameworkActions = new UiActions(page);
+            uiActions = new UiActions(page);
         }
 
         private string TxtUsername => "#user-name";
@@ -26,19 +26,19 @@ namespace NUnitPlaywrightFramework.Pages
 
         public void Login(string username, string password)
         {
-            frameworkActions.PerformAction(TxtUsername, ObjectActions.Type, username);
-            frameworkActions.PerformAction(TxtPassword, ObjectActions.Type, password);
-            frameworkActions.PerformAction(BtnLogin, ObjectActions.Click, string.Empty);
+            uiActions.PerformAction(TxtUsername, ObjectActions.Type, username);
+            uiActions.PerformAction(TxtPassword, ObjectActions.Type, password);
+            uiActions.PerformAction(BtnLogin, ObjectActions.Click, string.Empty);
         }
 
         public void VerifyErrorMessage(string expectedErrorMessage)
         {
-            frameworkActions.Verify(LblError, ObjectProperties.TEXT, expectedErrorMessage);
+            uiActions.Verify(LblError, ObjectProperties.TEXT, expectedErrorMessage);
         }
 
         public void VerifyTitle(string expectedTitle)
         {
-            frameworkActions.Verify(string.Empty, ObjectProperties.TITLE, expectedTitle);
+            uiActions.Verify(string.Empty, ObjectProperties.TITLE, expectedTitle);
         }
     }
 }
