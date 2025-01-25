@@ -30,13 +30,17 @@ jobs:
       run: |
         echo "export STANDARD_USERNAME=${{ secrets.STANDARD_USERNAME }}" >> $GITHUB_ENV
         echo "export STANDARD_PASSWORD=${{ secrets.STANDARD_PASSWORD }}" >> $GITHUB_ENV
-        echo "export HEADLESS=${{ vars.HEADLESS }}" >> $GITHUB_ENV
+        echo "export HEADLESS_MODE=${{ vars.HEADLESS_MODE }}" >> $GITHUB_ENV
         echo "export CAPTURE_SCREENSHOTS=${{ vars.CAPTURE_SCREENSHOTS }}" >> $GITHUB_ENV
+        echo "export API_BASE_URL=${{ vars.API_BASE_URL }}" >> $GITHUB_ENV
+        echo "export UI_BASE_URL=${{ vars.UI_BASE_URL }}" >> $GITHUB_ENV
       shell: bash
     - name: Test
       env:
-        USERNAME: ${{ secrets.STANDARD_USERNAME }}
-        PASSWORD: ${{ secrets.STANDARD_PASSWORD }}
-        HEADLESS: ${{ vars.HEADLESS }}
-        CAPTURE_SCREENSHOTS: $ {{ vars.CAPTURE_SCREENSHOTS }}
+        STANDARD_USERNAME: ${{ secrets.STANDARD_USERNAME }}
+        STANDARD_PASSWORD: ${{ secrets.STANDARD_PASSWORD }}
+        HEADLESS_MODE: ${{ vars.HEADLESS_MODE }}
+        CAPTURE_SCREENSHOTS: ${{ vars.CAPTURE_SCREENSHOTS }}
+        API_BASE_URL: ${{ vars.API_BASE_URL }}
+        UI_BASE_URL: ${{ vars.UI_BASE_URL }}
       run: dotnet test --no-build --verbosity normal
