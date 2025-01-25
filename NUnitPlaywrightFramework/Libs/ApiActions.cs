@@ -1,42 +1,29 @@
 ﻿using Newtonsoft.Json.Linq;
-using System.Net;
 
 namespace NUnitPlaywrightFramework.Libs
 {
-    internal class ApiActions
+    internal class ApiActions : ApiBase
     {
-        private HttpClient httpClient { get; set; }
-        private Uri apiBaseUrl { get; set; }
-
         internal ApiActions()
         {
-            httpClient = new();
-            apiBaseUrl = new Uri(new TestBase().GetEnvVariable(EnvironmentVariables.API_BASE_URL));
+            ApiBaseSetup().Wait();
         }
 
-        internal async Task<ResponseObjects> GetAsync(string endpoint)
+        public async Task<ResponseObjects> Get(string endpoint)
         {
-            var _response = await httpClient.GetAsync(new Uri(apiBaseUrl, endpoint));
-            var _responseCode = _response.StatusCode;
-            var _responseBody = await _response.Content.ReadAsStringAsync();
-            var _responseJson = JObject.Parse(_responseBody);
-            return new ResponseObjects { ResponseStatusCode = _responseCode, ResponseBody = _responseJson };
+            var response = await apiContext.GetAsync(endpoint);
+            var jsonResponse = await response.JsonAsync();
+            return new ResponseObjects
+            {
+                ResponseStatusCode = response.Status,
+                ResponseBody = jsonResponse.HasValue ? JObject.Parse(jsonResponse.Value.ToString()) : null
+            };
         }
-
-        internal async Task<ResponseObjects> PostAsync(string endpoint, HttpContent content)
-        {
-            var _response = await httpClient.PostAsync(new Uri(apiBaseUrl, endpoint), content);
-            var _responseCode = _response.StatusCode;
-            var _responseBody = await _response.Content.ReadAsStringAsync();
-            var _responseJson = JObject.Parse(_responseBody);
-            return new ResponseObjects { ResponseStatusCode = _responseCode, ResponseBody = _responseJson };
-        }
-
     }
 
     internal class ResponseObjects
     {
-        public HttpStatusCode ResponseStatusCode { get; set; }
+        public int ResponseStatusCode { get; set; }
         public JObject? ResponseBody { get; set; }
     }
 

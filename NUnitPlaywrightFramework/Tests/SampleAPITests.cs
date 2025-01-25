@@ -5,42 +5,57 @@ namespace NUnitPlaywrightFramework.Tests
 {
     [Parallelizable(ParallelScope.Self)]
     [TestFixture]
-    internal class SampleAPITests : ApiBase
+    internal class SampleAPITests
     {
-        protected ApiActions apiActions;
+        private ApiActions FrameworkActions;
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            ApiBaseSetup();
-            apiActions = new();
-        }
-
-        [Test]
-        public void VerifySingleUserResponseCode()
-        {
-            //Arrange
-            var expectedResponseCode = HttpStatusCode.OK;
-            string endpoint = "/api/users/2";
-
-            //Act
-            var responseCode = apiActions.GetAsync(endpoint).Result.ResponseStatusCode;
-
-            //Assert
-            Assert.That(responseCode, Is.EqualTo(expectedResponseCode));
+            FrameworkActions = new();
         }
 
         [Test]
         public void VerifyEmailForThirdUser()
         {
             //Arrange
-            string expectedResult = "eve.holt@reqres.in";
             string endpoint = "/api/users";
+            string expectedResult = "eve.holt@reqres.in";
 
             //Act
-            var response = apiActions.GetAsync(endpoint).Result.ResponseBody?["data"]?[3]?["email"]?.ToString();
+            var response = FrameworkActions.Get(endpoint).Result.ResponseBody?["data"]?[3]?["email"]?.ToString();
 
             //Assert
             Assert.That(response, Is.EqualTo(expectedResult));
         }
+
+        [Test]
+        public void VerifySingleUserResponseCode()
+        {
+            //Arrange
+            string endpoint = "/api/users/2";
+            var expectedResponseCode = 200;
+
+            //Act
+            var responseCode = FrameworkActions.Get(endpoint).Result.ResponseStatusCode;
+
+            //Assert
+            Assert.That(responseCode, Is.EqualTo(expectedResponseCode));
+        }
+
+        [Test]
+        public void VerifySingleUserNotFound()
+        {
+            //Arrange
+            string endpoint = "/api/users/23";
+            var expectedResponseCode = 404;
+
+            //Act
+            var responseCode = FrameworkActions.Get(endpoint).Result.ResponseStatusCode;
+
+            //Assert
+            Assert.That(responseCode, Is.EqualTo(expectedResponseCode));
+        }
+
+
     }
 }

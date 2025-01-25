@@ -14,7 +14,7 @@ namespace NUnitPlaywrightFramework.Tests
         [OneTimeSetUp]
         public async Task OneTimeSetup()
         {
-            await UISetup();
+            await UiBaseSetup();
             loginPage = new LoginPage(_page);
             productsPage = new ProductsPage(_page);
         }

@@ -30,13 +30,13 @@ namespace NUnitPlaywrightFramework.Libs
         Webkit
     }
 
-    public class EnvironmentVariables
+    internal static class EnvironmentVariables
     {
-        public const string UI_BASE_URL = "UI_BASE_URL";
-        public const string API_BASE_URL = "API_BASE_URL";
-        public const string HEADLESS_MODE = "HEADLESS_MODE";
-        public const string CAPTURE_SCREENSHOTS = "CAPTURE_SCREENSHOTS";
-        public const string STANDARD_USERNAME = "STANDARD_USERNAME";
-        public const string STANDARD_PASSWORD = "STANDARD_PASSWORD";
+        internal const string UI_BASE_URL = "UI_BASE_URL";
+        internal const string API_BASE_URL = "API_BASE_URL";
+        internal const string HEADLESS_MODE = "HEADLESS_MODE";
+        internal const string CAPTURE_SCREENSHOTS = "CAPTURE_SCREENSHOTS";
+        internal const string STANDARD_USERNAME = "STANDARD_USERNAME";
+        internal const string STANDARD_PASSWORD = "STANDARD_PASSWORD";
     }
 }

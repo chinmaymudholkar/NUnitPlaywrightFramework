@@ -1,14 +1,14 @@
 ﻿namespace NUnitPlaywrightFramework.Libs
 {
-    internal class Wrappers
+    internal static class Wrappers
     {
         //Create a method to get the current date and time
-        public string GetCurrentDateTime(string format= "yyyyMMddHHmmss")
+        public static string GetCurrentDateTime(string format= "yyyyMMddHHmmss")
         {
             return DateTime.Now.ToString(format);
         }
 
-        public string CleanString(string input)
+        public static string CleanString(string input)
         {
             char[] charsToRemove =
                         [

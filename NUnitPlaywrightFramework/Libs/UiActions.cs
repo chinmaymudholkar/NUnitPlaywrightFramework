@@ -4,13 +4,11 @@ namespace NUnitPlaywrightFramework.Libs
     public class UiActions
     {
         private readonly IPage _page;
-        private readonly Wrappers wrappers;
         private int screenshotCounter;
 
         public UiActions(IPage page)
         {
             _page = page;
-            wrappers = new();
             screenshotCounter = 1;
         }
 
@@ -160,7 +158,7 @@ namespace NUnitPlaywrightFramework.Libs
             {
                 string? base_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName;
                 base_path = (base_path == null) ? AppDomain.CurrentDomain.BaseDirectory : base_path;
-                string screenshot_path = Path.Combine(base_path, "Screenshots", $"{screenshotCounter.ToString("D4")}-{wrappers.GetCurrentDateTime()}-{wrappers.CleanString(file_name)}.png");
+                string screenshot_path = Path.Combine(base_path, "Screenshots", $"{screenshotCounter.ToString("D4")}-{Wrappers.GetCurrentDateTime()}-{Wrappers.CleanString(file_name)}.png");
                 _ = await _page.ScreenshotAsync(new PageScreenshotOptions { Path = screenshot_path });
                 screenshotCounter++;
             }
