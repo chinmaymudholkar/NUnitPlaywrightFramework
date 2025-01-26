@@ -18,7 +18,7 @@ namespace NUnitPlaywrightFramework.Pages
 
         public void VerifyHeading(string expectedHeading)
         {
-            FrameworkActions.Verify(LblHeader, ObjectProperties.TEXT, expectedHeading);
+            FrameworkActions.Verify(ElementProperties.TEXT, LblHeader, expectedHeading);
         }
     }
 }

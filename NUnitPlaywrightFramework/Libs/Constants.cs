@@ -1,6 +1,6 @@
 namespace NUnitPlaywrightFramework.Libs
 {
-    public enum ObjectActions
+    public enum ElementActions
     {
         Click,
         Type,
@@ -11,7 +11,7 @@ namespace NUnitPlaywrightFramework.Libs
         ListSelect
     }
 
-    public enum ObjectProperties
+    public enum ElementProperties
     {
         TEXT,
         TITLE,

@@ -12,87 +12,87 @@ namespace NUnitPlaywrightFramework.Libs
             screenshotCounter = 1;
         }
 
-        public void PerformAction(string selector, ObjectActions action, string value)
+        public void Act(ElementActions action, string selector, string value)
         {
-            TakeScreenshot($"{selector}-before-{action}").Wait();
+            TakeScreenshot($"{selector}-before-{action}");
             switch (action)
             {
-                case ObjectActions.Click:
+                case ElementActions.Click:
                     ClickAsync(selector).Wait();
                     break;
-                case ObjectActions.Type:
+                case ElementActions.Type:
                     TypeAsync(selector, value).Wait();
                     break;
-                case ObjectActions.CheckboxCheck:
+                case ElementActions.CheckboxCheck:
                     CheckAsync(selector).Wait();
                     break;
-                case ObjectActions.CheckboxUncheck:
+                case ElementActions.CheckboxUncheck:
                     UncheckAsync(selector).Wait();
                     break;
-                case ObjectActions.RadioButtonSelect:
+                case ElementActions.RadioButtonSelect:
                     RadioButtonSelectAsync(selector).Wait();
                     break;
-                case ObjectActions.ListSelect:
+                case ElementActions.ListSelect:
                     ListSelectAsync(selector, value).Wait();
                     break;
                 default:
                     WaitForSelectorAsync(selector).Wait();
                     break;
             }
-            TakeScreenshot($"{selector}-after-{action}").Wait();
+            TakeScreenshot($"{selector}-after-{action}");
         }
 
-        public void Verify(string selector, ObjectProperties property, string expectedValue)
+        public void Verify(ElementProperties property, string selector, string expectedValue)
         {
-            string actualValue = GetObjectProperty(selector, property);
+            string actualValue = GetElementProperty(property, selector);
             switch (property)
             {
-                case ObjectProperties.TEXT:
+                case ElementProperties.TEXT:
                     Assert.That(actualValue, Is.EqualTo(expectedValue));
                     break;
-                case ObjectProperties.TITLE:
+                case ElementProperties.TITLE:
                     Assert.That(actualValue, Is.EqualTo(expectedValue));
                     break;
-                case ObjectProperties.URL:
-                case ObjectProperties.HREF:
+                case ElementProperties.URL:
+                case ElementProperties.HREF:
                     Assert.That(actualValue, Is.EqualTo(expectedValue));
                     break;
-                case ObjectProperties.CHECKED:
+                case ElementProperties.CHECKED:
                     Assert.That(actualValue.ToLower(), Is.EqualTo("true"));
                     break;
-                case ObjectProperties.UNCHECKED:
+                case ElementProperties.UNCHECKED:
                     Assert.That(actualValue.ToLower(), Is.EqualTo("false"));
                     break;
-                case ObjectProperties.SELECTED:
+                case ElementProperties.SELECTED:
                     Assert.That(actualValue.ToLower(), Is.EqualTo("true"));
                     break;
-                case ObjectProperties.UNSELECTED:
+                case ElementProperties.UNSELECTED:
                     Assert.That(actualValue.ToLower(), Is.EqualTo("false"));
                     break;
             }
         }
 
-        public string GetObjectProperty(string selector, ObjectProperties property)
+        public string GetElementProperty(ElementProperties property, string selector)
         {
             string actualValue = string.Empty;
             switch (property)
             {
-                case ObjectProperties.TEXT:
+                case ElementProperties.TEXT:
                     actualValue = GetTextContentAsync(selector).Result;
                     break;
-                case ObjectProperties.TITLE:
+                case ElementProperties.TITLE:
                     actualValue = GetTitleAsync().Result;
                     break;
-                case ObjectProperties.URL:
-                case ObjectProperties.HREF:
+                case ElementProperties.URL:
+                case ElementProperties.HREF:
                     actualValue = GetAttributeAsync(selector, "href").Result;
                     break;
-                case ObjectProperties.CHECKED:
-                case ObjectProperties.UNCHECKED:
+                case ElementProperties.CHECKED:
+                case ElementProperties.UNCHECKED:
                     actualValue = GetAttributeAsync(selector, "checked").Result;
                     break;
-                case ObjectProperties.SELECTED:
-                case ObjectProperties.UNSELECTED:
+                case ElementProperties.SELECTED:
+                case ElementProperties.UNSELECTED:
                     actualValue = GetAttributeAsync(selector, "selected").Result;
                     break;
             }
@@ -151,7 +151,7 @@ namespace NUnitPlaywrightFramework.Libs
             return await _page.TitleAsync();
         }
 
-        private async Task TakeScreenshot(string file_name)
+        private void TakeScreenshot(string file_name)
         {
             
             if (bool.Parse(new UIBase().GetEnvVariable(EnvironmentVariables.CAPTURE_SCREENSHOTS)))
@@ -159,7 +159,7 @@ namespace NUnitPlaywrightFramework.Libs
                 string? base_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName;
                 base_path = (base_path == null) ? AppDomain.CurrentDomain.BaseDirectory : base_path;
                 string screenshot_path = Path.Combine(base_path, "Screenshots", $"{screenshotCounter.ToString("D4")}-{Wrappers.GetCurrentDateTime()}-{Wrappers.CleanString(file_name)}.png");
-                _ = await _page.ScreenshotAsync(new PageScreenshotOptions { Path = screenshot_path });
+                _page.ScreenshotAsync(new PageScreenshotOptions { Path = screenshot_path }).Wait();
                 screenshotCounter++;
             }
         }

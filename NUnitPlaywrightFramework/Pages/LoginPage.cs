@@ -26,19 +26,19 @@ namespace NUnitPlaywrightFramework.Pages
 
         public void Login(string username, string password)
         {
-            FrameworkActions.PerformAction(TxtUsername, ObjectActions.Type, username);
-            FrameworkActions.PerformAction(TxtPassword, ObjectActions.Type, password);
-            FrameworkActions.PerformAction(BtnLogin, ObjectActions.Click, string.Empty);
+            FrameworkActions.Act(ElementActions.Type, TxtUsername, username);
+            FrameworkActions.Act(ElementActions.Type, TxtPassword, password);
+            FrameworkActions.Act(ElementActions.Click, BtnLogin, string.Empty);
         }
 
         public void VerifyErrorMessage(string expectedErrorMessage)
         {
-            FrameworkActions.Verify(LblError, ObjectProperties.TEXT, expectedErrorMessage);
+            FrameworkActions.Verify(ElementProperties.TEXT, LblError, expectedErrorMessage);
         }
 
         public void VerifyTitle(string expectedTitle)
         {
-            FrameworkActions.Verify(string.Empty, ObjectProperties.TITLE, expectedTitle);
+            FrameworkActions.Verify(ElementProperties.TITLE, string.Empty, expectedTitle);
         }
     }
 }
